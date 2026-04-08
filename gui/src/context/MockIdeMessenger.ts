@@ -33,12 +33,6 @@ const DEFAULT_MOCK_CORE_RESPONSES: MockResponses = {
     contents: "Current file contents",
     path: "file:///Users/user/workspace1/current_file.py",
   },
-  "controlPlane/getCreditStatus": {
-    optedInToFreeTrial: false,
-    creditBalance: 0,
-    hasCredits: false,
-    hasPurchasedCredits: false,
-  },
   getWorkspaceDirs: [
     "file:///Users/user/workspace1",
     "file:///Users/user/workspace2",

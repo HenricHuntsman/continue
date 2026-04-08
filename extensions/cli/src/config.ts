@@ -42,6 +42,9 @@ function mergeUserAgentIntoRequestOptions(
   };
 }
 
+const DEFAULT_OLLAMA_MODEL = "qwen2.5-coder:7b";
+const DEFAULT_OLLAMA_API_BASE = "http://localhost:11434";
+
 /**
  * Creates an LLM API instance from a ModelConfig and auth configuration
  * Handles special logic for continue-proxy provider and constructs the API
@@ -53,31 +56,25 @@ export function createLlmApi(
   const accessToken = getAccessToken(authConfig);
   const organizationId = getOrganizationId(authConfig);
 
-  const config: LLMConfig =
-    model.provider === "continue-proxy"
-      ? {
-          provider: model.provider,
-          requestOptions: mergeUserAgentIntoRequestOptions(
-            model.requestOptions,
-          ),
-          apiBase: model.apiBase,
-          apiKey: accessToken ?? undefined,
-          env: {
-            apiKeyLocation: (model as any).apiKeyLocation,
-            orgScopeId: organizationId ?? null,
-            proxyUrl:
-              (model as { onPremProxyUrl: string | undefined })
-                .onPremProxyUrl ?? (env.apiBase ? env.apiBase : undefined),
-          },
-        }
-      : {
-          provider: model.provider as any,
-          model: model.model,
-          apiKey: model.apiKey,
-          apiBase: model.apiBase,
-          requestOptions: model.requestOptions,
-          env: model.env,
-        };
+  // Local-first fork behavior: never route through continue-proxy.
+  if (model.provider === "continue-proxy") {
+    return (
+      constructLlmApi({
+        provider: "ollama",
+        model: DEFAULT_OLLAMA_MODEL,
+        apiBase: DEFAULT_OLLAMA_API_BASE,
+      }) ?? null
+    );
+  }
+
+  const config: LLMConfig = {
+    provider: model.provider as any,
+    model: model.model,
+    apiKey: model.apiKey,
+    apiBase: model.apiBase,
+    requestOptions: model.requestOptions,
+    env: model.env,
+  };
 
   return constructLlmApi(config) ?? null;
 }

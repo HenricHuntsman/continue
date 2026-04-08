@@ -49,9 +49,9 @@ export async function handleMaxedOutFreeTrial(
   // Clear the screen but don't show ASCII art - keep it minimal since we're resuming a conversation
   console.clear();
 
-  console.log(chalk.yellow("🚀 Free trial limit reached!\n"));
+  console.log(chalk.yellow("🚀 Usage limit reached!\n"));
   console.log("Choose how you'd like to Continue:");
-  console.log(chalk.white("1. 💳 Sign up for models add-on"));
+  console.log(chalk.white("1. 🦙 Set up local Ollama"));
   console.log(chalk.white("2. 🔑 Enter your Anthropic API key"));
 
   const choice = await questionWithChoices(
@@ -62,24 +62,24 @@ export async function handleMaxedOutFreeTrial(
   );
 
   if (choice === "1" || choice === "") {
-    // Option 1: Open models setup page
-    const modelsUrl = new URL("setup-models", env.appUrl).toString();
-    console.log(chalk.blue(`Opening ${modelsUrl}...`));
+    // Option 1: Open Ollama setup page
+    const ollamaUrl = "https://ollama.com/download";
+    console.log(chalk.blue(`Opening ${ollamaUrl}...`));
 
     try {
-      await open(modelsUrl);
+      await open(ollamaUrl);
       console.log(chalk.green("\n✓ Browser opened successfully!"));
       console.log(
         chalk.dim(
-          "After setting up your models subscription, restart the CLI to continue.",
+          "After installing Ollama and running a model, restart the CLI to continue.",
         ),
       );
     } catch {
       console.log(chalk.yellow("\n⚠ Could not open browser automatically"));
-      console.log(chalk.white(`Please visit: ${modelsUrl}`));
+      console.log(chalk.white(`Please visit: ${ollamaUrl}`));
       console.log(
         chalk.dim(
-          "After setting up your models subscription, restart the CLI to continue.",
+          "After installing Ollama and running a model, restart the CLI to continue.",
         ),
       );
     }

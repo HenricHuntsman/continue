@@ -528,10 +528,6 @@ export class Core {
       return await getControlPlaneEnv(this.ide.getIdeSettings());
     });
 
-    on("controlPlane/getCreditStatus", async (msg) => {
-      return this.configHandler.controlPlaneClient.getCreditStatus();
-    });
-
     on("mcp/reloadServer", async (msg) => {
       await MCPManagerSingleton.getInstance().refreshConnection(msg.data.id);
     });

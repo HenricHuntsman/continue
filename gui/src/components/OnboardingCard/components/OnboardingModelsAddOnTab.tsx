@@ -10,7 +10,7 @@ import { useOnboardingCard } from "../hooks/useOnboardingCard";
 /**
  * Models Add-On tab component with two-step onboarding:
  * 1. Create Account - Uses auth.login(true) to sign up and redirect back to IDE
- * 2. Purchase Credits - Opens /settings/billing to purchase credits
+ * 2. Configure Ollama - Opens local model configuration
  */
 export function OnboardingModelsAddOnTab() {
   const ideMessenger = useContext(IdeMessengerContext);
@@ -31,9 +31,9 @@ export function OnboardingModelsAddOnTab() {
     });
   }
 
-  function handlePurchaseCredits() {
-    ideMessenger.post("controlPlane/openUrl", {
-      path: "settings/billing",
+  function handleConfigureOllama() {
+    ideMessenger.post("config/openProfile", {
+      profileId: undefined,
     });
     close();
   }
@@ -48,7 +48,7 @@ export function OnboardingModelsAddOnTab() {
     <div className="flex h-full w-full flex-col items-center justify-center text-center">
       <div className="mb-4 flex flex-col items-center text-center">
         <h2 className="text-foreground mb-1 text-2xl font-semibold">
-          Models Add-on
+          Local Ollama Setup
         </h2>
 
         <span className="text-description text-xs">
@@ -57,9 +57,9 @@ export function OnboardingModelsAddOnTab() {
             className="cursor-pointer underline hover:brightness-125"
             onClick={openPricingPage}
           >
-            variety of frontier models
+            local Ollama model
           </span>{" "}
-          at cost.
+          without billing.
         </span>
       </div>
 
@@ -95,7 +95,7 @@ export function OnboardingModelsAddOnTab() {
           </div>
         </div>
 
-        {/* Step 2: Purchase Credits */}
+        {/* Step 2: Configure Ollama */}
         <div className="flex flex-col gap-2">
           <div className="flex items-center gap-2">
             <div
@@ -110,17 +110,17 @@ export function OnboardingModelsAddOnTab() {
             <span
               className={`text-sm ${isLoggedIn ? "text-foreground font-medium" : "text-description"}`}
             >
-              Purchase Credits
+              Configure Ollama
             </span>
           </div>
           <div className="flex gap-2">
             <div className="w-5 flex-shrink-0" />
             <Button
-              onClick={handlePurchaseCredits}
+              onClick={handleConfigureOllama}
               className="flex-1"
               disabled={!isLoggedIn}
             >
-              Purchase Credits
+              Configure Ollama
             </Button>
           </div>
         </div>

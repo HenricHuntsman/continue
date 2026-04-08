@@ -31,11 +31,19 @@ import {
 const DEFAULT_MODEL_IDENTIFIER: PackageIdentifier = {
   uriType: "slug",
   fullSlug: {
-    ownerSlug: "anthropic",
-    packageSlug: "claude-sonnet-4-6",
+    ownerSlug: "ollama",
+    packageSlug: "qwen2.5-coder-7b",
     versionSlug: "1.0.0",
   },
 };
+
+const DEFAULT_LOCAL_OLLAMA_MODEL = {
+  name: "qwen2.5-coder-7b",
+  provider: "ollama",
+  model: "qwen2.5-coder:7b",
+  apiBase: "http://localhost:11434",
+  roles: ["chat"],
+} as const;
 
 interface ConfigServiceInit {
   authConfig: AuthConfig;
@@ -235,13 +243,15 @@ export class ConfigService
         }
         config.models = [...(config.models || []), defaultModel];
       } catch (e) {
+        config.models = [...(config.models || []), DEFAULT_LOCAL_OLLAMA_MODEL];
+
         if (isHeadless) {
-          throw new Error(
-            "No model specified in headless mode (and failed to load default model)",
+          logger.warn(
+            "No model specified in headless mode. Falling back to local Ollama model.",
           );
         } else {
           logger.error(
-            "Failed to load default model with no model specified",
+            "Failed to load default model with no model specified; using local Ollama fallback",
             e,
           );
         }

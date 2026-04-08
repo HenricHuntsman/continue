@@ -80,10 +80,9 @@ export default function StarterCreditsPopover({
     });
   };
 
-  const onPurchaseCredits = async () => {
-    await ideMessenger.request("controlPlane/openUrl", {
-      path: "settings/billing",
-      orgSlug: undefined,
+  const onUseLocalModels = async () => {
+    ideMessenger.post("config/openProfile", {
+      profileId: undefined,
     });
   };
 
@@ -184,8 +183,8 @@ export default function StarterCreditsPopover({
               <SecondaryButton className="flex-1" onClick={onSetupApiKeys}>
                 Setup API Keys
               </SecondaryButton>
-              <Button className="flex-1" onClick={onPurchaseCredits}>
-                Purchase Credits
+              <Button className="flex-1" onClick={onUseLocalModels}>
+                Configure Ollama
               </Button>
             </div>
           </div>

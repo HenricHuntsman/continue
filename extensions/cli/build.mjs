@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 import * as esbuild from "esbuild";
-import { chmodSync, copyFileSync, writeFileSync } from "fs";
+import { chmodSync, copyFileSync, existsSync, writeFileSync } from "fs";
 import { dirname, resolve } from "path";
 import { fileURLToPath } from "url";
 
@@ -10,6 +10,25 @@ const args = process.argv.slice(2);
 const noMinify = args.includes("--no-minify");
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
+
+function resolveLocalPackageEntry(packageName) {
+  const base = resolve(__dirname, `../../packages/${packageName}`);
+  const dist = resolve(base, "dist/index.js");
+  const srcTs = resolve(base, "src/index.ts");
+  const srcJs = resolve(base, "src/index.js");
+
+  if (existsSync(dist)) {
+    return dist;
+  }
+  if (existsSync(srcTs)) {
+    return srcTs;
+  }
+  if (existsSync(srcJs)) {
+    return srcJs;
+  }
+
+  return dist;
+}
 
 // List of packages to mark as external (ONLY native modules that cannot be bundled)
 // Note: Everything else will be bundled to create a self-contained CLI
@@ -52,31 +71,15 @@ try {
 
     // Handle TypeScript paths and local packages
     alias: {
-      "@continuedev/config-yaml": resolve(
-        __dirname,
-        "../../packages/config-yaml/dist/index.js",
-      ),
-      "@continuedev/openai-adapters": resolve(
-        __dirname,
-        "../../packages/openai-adapters/dist/index.js",
-      ),
-      "@continuedev/config-types": resolve(
-        __dirname,
-        "../../packages/config-types/dist/index.js",
-      ),
+      "@continuedev/config-yaml": resolveLocalPackageEntry("config-yaml"),
+      "@continuedev/openai-adapters":
+        resolveLocalPackageEntry("openai-adapters"),
+      "@continuedev/config-types": resolveLocalPackageEntry("config-types"),
       core: resolve(__dirname, "../../core"),
-      "@continuedev/fetch": resolve(
-        __dirname,
-        "../../packages/fetch/dist/index.js",
-      ),
-      "@continuedev/llm-info": resolve(
-        __dirname,
-        "../../packages/llm-info/dist/index.js",
-      ),
-      "@continuedev/terminal-security": resolve(
-        __dirname,
-        "../../packages/terminal-security/dist/index.js",
-      ),
+      "@continuedev/fetch": resolveLocalPackageEntry("fetch"),
+      "@continuedev/llm-info": resolveLocalPackageEntry("llm-info"),
+      "@continuedev/terminal-security":
+        resolveLocalPackageEntry("terminal-security"),
     },
 
     // Add banner to create require for CommonJS packages

@@ -85,7 +85,6 @@ export const WEBVIEW_TO_CORE_PASS_THROUGH: (keyof ToCoreFromWebviewProtocol)[] =
     "tools/evaluatePolicy",
     "tools/preprocessArgs",
     "controlPlane/getEnvironment",
-    "controlPlane/getCreditStatus",
     "controlPlane/openUrl",
     "isItemTooBig",
     "process/markAsBackgrounded",
@@ -110,5 +109,4 @@ export const CORE_TO_WEBVIEW_PASS_THROUGH: (keyof ToWebviewFromCoreProtocol)[] =
     "sessionUpdate",
     "didCloseFiles",
     "toolCallPartialOutput",
-    "freeTrialExceeded",
   ];

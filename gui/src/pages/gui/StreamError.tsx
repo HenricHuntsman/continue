@@ -19,7 +19,6 @@ import { setDialogMessage, setShowDialog } from "../../redux/slices/uiSlice";
 import { streamResponseThunk } from "../../redux/thunks/streamResponse";
 import { isLocalProfile } from "../../util";
 import { analyzeError } from "../../util/errorAnalysis";
-import { OutOfCreditsDialog } from "./OutOfCreditsDialog";
 
 interface StreamErrorProps {
   error: unknown;
@@ -119,15 +118,6 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
       <span>Resubmit last message</span>
     </GhostButton>
   );
-
-  if (
-    parsedError.includes(
-      "You have no credits remaining on your Continue account",
-    ) ||
-    parsedError.includes("You're out of credits!")
-  ) {
-    return <OutOfCreditsDialog />;
-  }
 
   let errorContent = (
     <div className="mb-1 mt-3">

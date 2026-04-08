@@ -33,8 +33,8 @@ describe("FreeTrialTransitionUI - Rendering and Props Tests", () => {
       );
 
       const frame = lastFrame();
-      expect(frame).toContain("🚀 Free trial limit reached!");
-      expect(frame).toContain("1. 💳 Sign up for models add-on");
+      expect(frame).toContain("🚀 Usage limit reached!");
+      expect(frame).toContain("1. 🦙 Set up local Ollama");
       expect(frame).toContain("2. 🔑 Enter your Anthropic API key");
       expect(frame).toContain("3. ⚙️ Switch to a different configuration");
       expect(frame).toContain("↑/↓ to navigate or 1/2/3 to select");
@@ -46,7 +46,7 @@ describe("FreeTrialTransitionUI - Rendering and Props Tests", () => {
       );
 
       const frame = lastFrame();
-      expect(frame).toContain("➤ 1. 💳 Sign up for models add-on");
+      expect(frame).toContain("➤ 1. 🦙 Set up local Ollama");
       expect(frame).not.toContain("➤ 2. 🔑 Enter your Anthropic API key");
       expect(frame).not.toContain(
         "➤ 3. ⚙️ Switch to a different configuration",
@@ -95,7 +95,7 @@ describe("FreeTrialTransitionUI - Rendering and Props Tests", () => {
       );
 
       const frame = lastFrame();
-      expect(frame).toContain("Sign up for models add-on (recommended)");
+      expect(frame).toContain("Set up local Ollama (recommended)");
       expect(frame).toContain("Enter your Anthropic API key");
       expect(frame).toContain("Switch to a different configuration");
     });
@@ -146,7 +146,7 @@ describe("FreeTrialTransitionUI - Rendering and Props Tests", () => {
       const frame = lastFrame();
       const lines = frame?.split("\n") || [];
       const modelsLine = lines.find((line) =>
-        line.includes("Sign up for models add-on"),
+        line.includes("Set up local Ollama"),
       );
       const apiKeyLine = lines.find((line) =>
         line.includes("Enter your Anthropic API key"),

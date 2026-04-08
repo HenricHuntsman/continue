@@ -1325,13 +1325,7 @@ To get started:
 2. The router runs locally at \`http://localhost:1337\`
 3. A wallet is auto-generated on first run
 4. Select a model preset below
-
-**Payment Options:**
-- \`blockrun/free\` — No payment required (free-tier models)
-- \`blockrun/eco\` — Economy tier (fund wallet with USDC)
-- \`blockrun/auto\` — Full routing (fund wallet with USDC)
-
-Fund your wallet with USDC on Solana or Base. ClawRouter uses x402 micropayments for seamless pay-per-use.`,
+`,
     icon: "clawrouter.png",
     tags: [ModelProviderTags.Local, ModelProviderTags.OpenSource],
     packages: [

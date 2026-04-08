@@ -115,7 +115,7 @@ const FreeTrialTransitionUI: React.FC<FreeTrialTransitionUIProps> = ({
   const [apiKey, setApiKey] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [wasModelsSetup, setWasModelsSetup] = useState(false);
+  const [wasSetupCompleted, setWasSetupCompleted] = useState(false);
 
   // Fetch organizations using SWR
   const { data: organizations } = useSWR(
@@ -164,8 +164,8 @@ const FreeTrialTransitionUI: React.FC<FreeTrialTransitionUIProps> = ({
     } else if (currentStep === "success" || currentStep === "error") {
       if (key.return) {
         closeCurrentScreen();
-        // If user went through models setup, do a full reload to register their purchase
-        if (wasModelsSetup) {
+        // If user completed a setup flow, reload to pick up changes.
+        if (wasSetupCompleted) {
           onReload();
         }
       }
@@ -174,27 +174,27 @@ const FreeTrialTransitionUI: React.FC<FreeTrialTransitionUIProps> = ({
 
   const handleOptionSelect = async () => {
     if (selectedOption === 1) {
-      // Option 1: Open models setup page
+      // Option 1: Open Ollama setup page
       setCurrentStep("processing");
-      const modelsUrl = new URL("settings/billing", env.appUrl).toString();
-      setWasModelsSetup(true); // Track that user went through models setup
+      const ollamaUrl = "https://ollama.com/download";
+      setWasSetupCompleted(true);
 
       try {
-        await open(modelsUrl);
+        await open(ollamaUrl);
         setSuccessMessage(
-          `Browser opened to ${modelsUrl}. After setting up your models subscription, press Enter to continue.`,
+          `Browser opened to ${ollamaUrl}. After installing Ollama and running a model (for example: ollama run qwen2.5-coder:7b), press Enter to continue.`,
         );
         setCurrentStep("success");
       } catch {
         setErrorMessage(
-          `Could not open browser automatically. Please visit: ${modelsUrl}. After setting up your models subscription, press Enter to continue.`,
+          `Could not open browser automatically. Please visit: ${ollamaUrl}. After installing Ollama and running a model, press Enter to continue.`,
         );
         setCurrentStep("error");
       }
     } else if (selectedOption === 2) {
       // Option 2: Enter API key
       setCurrentStep("enterApiKey");
-      setWasModelsSetup(false); // This is not models setup
+      setWasSetupCompleted(true);
     } else if (selectedOption === 3) {
       // Option 3: Switch to different configuration
       navigateTo("config");
@@ -229,7 +229,7 @@ const FreeTrialTransitionUI: React.FC<FreeTrialTransitionUIProps> = ({
 
   if (currentStep === "choice") {
     const options = [
-      { num: 1, text: "💳 Sign up for models add-on (recommended)" },
+      { num: 1, text: "🦙 Set up local Ollama (recommended)" },
       { num: 2, text: "🔑 Enter your Anthropic API key" },
       { num: 3, text: "⚙️ Switch to a different configuration" },
     ];
@@ -244,7 +244,7 @@ const FreeTrialTransitionUI: React.FC<FreeTrialTransitionUIProps> = ({
     return (
       <Box {...defaultBoxStyles("yellow")}>
         <Text bold color="yellow">
-          🚀 Free trial limit reached!
+          🚀 Usage limit reached!
         </Text>
         <Text>Choose how you'd like to continue:</Text>
         <Text></Text>
@@ -303,8 +303,8 @@ const FreeTrialTransitionUI: React.FC<FreeTrialTransitionUIProps> = ({
         <Text>{successMessage}</Text>
         <Text></Text>
         <Text color="gray">
-          {wasModelsSetup
-            ? "Press Enter to reload and continue with your new subscription"
+          {wasSetupCompleted
+            ? "Press Enter to reload and continue"
             : "Press Enter to continue your conversation"}
         </Text>
       </Box>
@@ -320,7 +320,7 @@ const FreeTrialTransitionUI: React.FC<FreeTrialTransitionUIProps> = ({
         <Text>{errorMessage}</Text>
         <Text></Text>
         <Text color="gray">
-          {wasModelsSetup
+          {wasSetupCompleted
             ? "Press Enter to reload and try again"
             : "Press Enter to continue"}
         </Text>

@@ -2,8 +2,7 @@ import { useContext } from "react";
 import { Button, SecondaryButton } from "../..";
 import { useAuth } from "../../../context/Auth";
 import { IdeMessengerContext } from "../../../context/IdeMessenger";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
-import { selectCurrentOrg } from "../../../redux/slices/profilesSlice";
+import { useAppDispatch } from "../../../redux/hooks";
 import { selectFirstHubProfile } from "../../../redux/thunks/selectFirstHubProfile";
 import ContinueLogo from "../../svg/ContinueLogo";
 import { useOnboardingCard } from "../hooks/useOnboardingCard";
@@ -18,7 +17,6 @@ export function OnboardingCardLanding({
   const ideMessenger = useContext(IdeMessengerContext);
   const onboardingCard = useOnboardingCard();
   const auth = useAuth();
-  const currentOrg = useAppSelector(selectCurrentOrg);
   const dispatch = useAppDispatch();
 
   function onGetStarted() {
@@ -34,14 +32,6 @@ export function OnboardingCardLanding({
         ideMessenger.post("showToast", ["info", "🎉 Welcome to Continue!"]);
       }
     });
-  }
-
-  function openBillingPage() {
-    ideMessenger.post("controlPlane/openUrl", {
-      path: "settings/billing",
-      orgSlug: currentOrg?.slug,
-    });
-    onboardingCard.close(isDialog);
   }
 
   return (

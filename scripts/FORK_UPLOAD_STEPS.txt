@@ -1,0 +1,28 @@
+Fork Packaging and Upload Steps
+
+1) Optional: switch to Node 20 if needed
+   nvm use 20
+
+2) Build artifacts only (zip + vsix)
+   bash /workspaces/continue/scripts/fork-build-local.sh
+
+3) Push fork branch with build + commit + push in one command
+   bash /workspaces/continue/scripts/fork-push-local.sh <your-fork-remote-or-url>
+
+Examples:
+- Existing remote name:
+  bash /workspaces/continue/scripts/fork-push-local.sh myfork
+
+- Direct git URL:
+  bash /workspaces/continue/scripts/fork-push-local.sh git@github.com:YOUR_USER/continue.git
+
+4) Artifact output directory
+   /workspaces/continue/fork-artifacts
+
+Files to upload:
+- continue-fork-local-ollama.zip
+- generated .vsix file
+
+Optional:
+- Skip rebuilding artifacts and only commit/push
+  RUN_BUILD=0 bash /workspaces/continue/scripts/fork-push-local.sh myfork

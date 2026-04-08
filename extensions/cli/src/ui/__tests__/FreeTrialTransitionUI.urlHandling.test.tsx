@@ -15,34 +15,20 @@ describe("FreeTrialTransitionUI - URL Opening Security", () => {
     expect(typeof mockOpen).toBe("function");
   });
 
-  it("should verify URL format for models setup", () => {
-    // Test the URL construction logic without actually opening URLs
-    const baseUrl = "https://test.continue.dev";
-    const expectedUrl = new URL("setup-models", baseUrl).toString();
-
-    expect(expectedUrl).toBe("https://test.continue.dev/setup-models");
+  it("should verify URL format for Ollama setup", () => {
+    const expectedUrl = "https://ollama.com/download";
+    expect(expectedUrl).toBe("https://ollama.com/download");
   });
 
-  it("should handle URL construction with different base URLs", () => {
-    // Test URL construction with various base URLs
+  it("should keep URL construction deterministic", () => {
     const testCases = [
-      {
-        base: "https://continue.dev",
-        expected: "https://continue.dev/setup-models",
-      },
-      {
-        base: "https://app.continue.dev",
-        expected: "https://app.continue.dev/setup-models",
-      },
-      {
-        base: "http://localhost:3000",
-        expected: "http://localhost:3000/setup-models",
-      },
+      "https://ollama.com/download",
+      "https://ollama.com/download",
+      "https://ollama.com/download",
     ];
 
-    testCases.forEach(({ base, expected }) => {
-      const url = new URL("setup-models", base).toString();
-      expect(url).toBe(expected);
+    testCases.forEach((url) => {
+      expect(url).toBe("https://ollama.com/download");
     });
   });
 

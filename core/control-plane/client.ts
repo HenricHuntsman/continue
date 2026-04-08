@@ -19,11 +19,7 @@ import {
 } from "../index.js";
 import { Logger } from "../util/Logger.js";
 
-import {
-  ControlPlaneSessionInfo,
-  HubSessionInfo,
-  isOnPremSession,
-} from "./AuthTypes.js";
+import { ControlPlaneSessionInfo, isOnPremSession } from "./AuthTypes.js";
 import { getControlPlaneEnv } from "./env.js";
 
 export interface PolicyResponse {
@@ -306,45 +302,6 @@ export class ControlPlaneClient {
       // Capture control plane API failures to Sentry
       Logger.error(e, {
         context: "control_plane_credit_status",
-      });
-      return null;
-    }
-  }
-
-  /**
-   * JetBrains does not support deep links, so we only check for `vsCodeUriScheme`
-   * @param vsCodeUriScheme
-   * @returns
-   */
-  public async getModelsAddOnCheckoutUrl(
-    vsCodeUriScheme?: string,
-  ): Promise<{ url: string } | null> {
-    if (!(await this.isSignedIn())) {
-      return null;
-    }
-
-    try {
-      const params = new URLSearchParams({
-        // LocalProfileLoader ID
-        profile_id: "local",
-      });
-
-      if (vsCodeUriScheme) {
-        params.set("vscode_uri_scheme", vsCodeUriScheme);
-      }
-
-      const resp = await this.requestAndHandleError(
-        `ide/get-models-add-on-checkout-url?${params.toString()}`,
-        {
-          method: "GET",
-        },
-      );
-      return (await resp.json()) as { url: string };
-    } catch (e) {
-      // Capture control plane API failures to Sentry
-      Logger.error(e, {
-        context: "control_plane_models_checkout_url",
-        vsCodeUriScheme,
       });
       return null;
     }
